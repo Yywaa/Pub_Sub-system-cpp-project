@@ -12,8 +12,8 @@ typedef struct publisher_db_entry_
     char pub_name[64];     // name
     uint32_t publisher_id; // publisher ID
 
-    uint32_t published_msg_ids[MAX_PUBLISHED_MSG];
-    publisher_db_entry_() // constructor
+    uint32_t published_msg_ids[MAX_PUBLISHED_MSG]; // Message that this publisher published
+    publisher_db_entry_()                          // constructor
     {
         pub_name[0] = '\0';
         publisher_id = 0;
@@ -23,9 +23,9 @@ typedef struct publisher_db_entry_
 
 typedef struct subscriber_db_entry_
 {
-    char sub_name[64];     // subscribers name
-    uint32_t subsriber_id; // subscribers ID
-
+    char sub_name[64];                               // subscribers name
+    uint32_t subsriber_id;                           // subscribers ID
+    uint32_t subscriber_msg_ids[MAX_SUBSCRIBED_MSG]; // Message that this subscriber subscribed
     subscriber_db_entry_()
     {
         sub_name[0] = '\0';

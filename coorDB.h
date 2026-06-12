@@ -19,7 +19,8 @@ bool subscriber_unsubscribe_msg(uint32_t sub_id, uint32_t msg_id);
 /****Pub-sub DB operation */
 
 typedef struct pub_sub_db_entry_ pub_sub_db_entry_t;
-pub_sub_db_entry_t *pub_sub_db_create(uint32_t msg_id, std::shared_ptr<subscriber_db_entry_t> Sub);
+pub_sub_db_entry_t *pub_sub_db_create(uint32_t msg_id, std::shared_ptr<subscriber_db_entry_t> SubEntry);
 
 void pub_sub_db_delete(uint32_t msg_id, uint32_t sub_id);
 pub_sub_db_entry_t *pub_sub_db_get(uint32_t msg_id);
+void pub_sub_db_delete_subscriber(std::shared_ptr<subscriber_db_entry_t> SubEntry);
