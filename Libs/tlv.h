@@ -7,7 +7,7 @@
 
 #define TVL_OVERHEAD_SIZE 2
 
-/*mACRO TO Type Lenght Value reply
+/*MACRO To Type Length Value reply
  *char* -start_ptr, IN
  *unsigned char -type,OUT
  *unsigned char -lenght, OUT
