@@ -1,6 +1,6 @@
 #include "pubsub.h"
 #include <unordered_map>
-#include "coorDB.h"
+#include "coordDB.h"
 #include <stdexcept>
 #include <iostream>
 #include <stdio.h>
@@ -266,5 +266,57 @@ void pub_sub_db_delete_subscriber(std::shared_ptr<subscriber_db_entry_t> SubEntr
         {
             ++it;
         }
+    }
+}
+/*Display all DB contents */
+void coord_db_display()
+{
+    // printf publishers database
+    printf("Publisher DB: \n");
+    for (auto it = pub_db.begin(); it != pub_db.end(); it++)
+    {
+        printf("Publisher ID :%u, Publisher name: %s. \n", it->second->publisher_id, it->second->pub_name);
+        /*print published messages*/
+        for (int i = 0; i < MAX_PUBLISHED_MSG; i++)
+        {
+            if (it->second->published_msg_ids[i])
+            {
+                printf("Published Message ID:%u\n", it->second->published_msg_ids[i]);
+            }
+        }
+    }
+
+    // print subscribers database
+    printf("Subscribers ID: \n");
+    for (auto it = sub_db.begin(); it != sub_db.end(); it++)
+    {
+        printf("Subscribers ID: %u,Subscribers name:%s\n", it->second->subsriber_id, it->second->sub_name);
+        /*print subscriberd messages*/
+        for (int i = 0; i < MAX_SUBSCRIBED_MSG; i++)
+        {
+            if (it->second->subscriber_msg_ids[i])
+            {
+                printf("Subscribed Message ID: %u\n", it->second->subscriber_msg_ids[i]);
+            }
+        }
+    }
+
+    // printf message ID and its subscribers name
+    printf("Pub_Sub_db:\n");
+    for (auto it = pub_sub_db.begin(); it != pub_sub_db.end(); it++)
+    {
+        // printf("Message ID:%u\n", it->first); //my code
+        printf("Messgae ID :%u\n", it->second->publish_msg_code);
+        for (auto iter = it->second->subscribers.begin(); iter != it->second->subscribers.end(); iter++)
+        {
+            // printf("Subscribers name:%s\n", (*iter)->sub_name);
+            printf("Subscribers ID:%u\n", (*iter)->subsriber_id);
+        }
+        // advanced
+        /*
+        for (const auto &sub : it->second->subscribers)
+        {
+            std::cout << "Subscribes name:" << sub->sub_name << "\n";
+        }*/
     }
 }

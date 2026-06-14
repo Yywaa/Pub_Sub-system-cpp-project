@@ -1,3 +1,6 @@
+#ifndef __COORD_DB__
+#define __COORD_DB__
+
 #include <stdint.h>
 #include "pubsub.h"
 
@@ -24,3 +27,7 @@ pub_sub_db_entry_t *pub_sub_db_create(uint32_t msg_id, std::shared_ptr<subscribe
 void pub_sub_db_delete(uint32_t msg_id, uint32_t sub_id);
 pub_sub_db_entry_t *pub_sub_db_get(uint32_t msg_id);
 void pub_sub_db_delete_subscriber(std::shared_ptr<subscriber_db_entry_t> SubEntry);
+
+void coord_db_display();
+
+#endif
