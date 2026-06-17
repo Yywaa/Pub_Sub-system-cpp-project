@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include "cmsgOp.h"
 #include <stdio.h>
-#include "tlv.h"
+#include "../Libs/tlv.h"
+#include "memory.h"
+#include <cstdlib>
 
 void cmsg_debug_print(cmsg_t *cmsg)
 {
@@ -24,4 +26,15 @@ void cmsg_debug_print(cmsg_t *cmsg)
         printf("TLV Value:%s\n", tlv_value);
     }
     ITERATE_TLV_END;
+}
+
+cmsg_t *cmsg_data_prepare2(msg_type_t msg_type, sub_msg_type_t sub_msg_type, uint32_t msg_code, int trailing_space)
+{
+    cmsg_t *cmsg = (cmsg_t *)calloc(1, sizeof(cmsg_t) + trailing_space);
+    cmsg->msg_id = 0;
+    cmsg->msg_type = msg_type;
+    cmsg->sub_msg_type = sub_msg_type;
+    cmsg->msg_code = msg_code;
+    cmsg->tlv_buffer_size = trailing_space;
+    return cmsg;
 }

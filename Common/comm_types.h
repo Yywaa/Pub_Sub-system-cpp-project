@@ -6,6 +6,17 @@
 #define COORD_IP_ADDR 2130706433 // 127.0.0.1
 #define COORD_UDP_PORT 40000
 
+/*TLV definitions*/
+#define TLV_CODE_NAME 1
+#define TLV_CODE_NAME_LEN 32
+#define TLV_IPC_NET_SKT_LEN 6
+#define TLV_IPC_TYPE_MSGQ 2  // TLV size 2 Bytes
+#define TLV_IPC_TYPE_UXSKT 3 // TLV size 2 Bytes
+#define TLV_IPC_TYPE_CBK 4
+#define TLV_IPC_NET_UDP_SKT 5
+#define TLV_DATA_128 6
+#define TLV_DATA_256 7
+
 typedef enum
 {
     SUBS_TO_COORD,
@@ -22,7 +33,9 @@ typedef enum
     SUB_MSG_DELETE,     // publiser unpublishes a mesaage or subscriber unscribes a message
     SUB_MSG_REGISTER,   // subscriber or publisher register or unregister a massge
     SUB_MSG_UNREGISTER, // subscriber or publisher register or unregister a massge
-    SUB_MSG_ERROR,      // error
+    SUB_MSG_ID_ALLOC_SUCCESS,
+    SUB_NSG_IPC_CHANNEL_ADD,
+    SUB_MSG_ERROR, // error
 
 } sub_msg_type_t;
 
@@ -33,6 +46,11 @@ typedef enum
     CMSG_PR_LOW,
     CMSG_PR_MAX,
 } cmsg_pr_t;
+
+typedef enum
+{
+    ERROR_TLV_MISSING
+} error_codes_t;
 typedef struct cmsg_
 {
     /*
@@ -71,7 +89,7 @@ typedef struct cmsg_
 /*convert enum to its corresponding string*/
 static inline const char *msg_type_to_string(msg_type_t msg_type)
 {
-    char *it = nullptr;
+    const char *it = nullptr;
     switch (msg_type)
     {
     case SUBS_TO_COORD:
@@ -95,7 +113,7 @@ static inline const char *msg_type_to_string(msg_type_t msg_type)
 /*convert enum to its corresponding string*/
 static inline const char *sub_msg_type_to_string(sub_msg_type_t sub_msg_type)
 {
-    char *it = nullptr;
+    const char *it = nullptr;
     switch (sub_msg_type)
     {
     case SUB_MSG_DATA:
@@ -121,4 +139,49 @@ static inline const char *sub_msg_type_to_string(sub_msg_type_t sub_msg_type)
         return nullptr;
     }
 }
+
+static inline const char *tlv_str(int tlv_code_point)
+{
+    switch (tlv_code_point)
+    {
+    case TLV_CODE_NAME:
+        return "TLV_CODE_NAME";
+    case TLV_IPC_TYPE_MSGQ:
+        return "TL_IPC_TYPE_MSGQ";
+    case TLV_IPC_TYPE_UXSKT:
+        return "TLV_IPC_TYPE_UXSKT";
+    case TLV_IPC_TYPE_CBK:
+        return "TLV_IPC_TYPE_CBK";
+    case TLV_IPC_NET_UDP_SKT:
+        return "TLV_IPC_NET_UDP_SKT";
+    case TLV_DATA_128:
+        return "TLV_DATA_128";
+    case TLV_DATA_256:
+        return "TLV_DATA_256";
+    default:
+        return "UNKOWN";
+    }
+}
+static int tlv_data_len(int tlv_code_point)
+{
+    switch (tlv_code_point)
+    {
+    case TLV_CODE_NAME:
+        return TLV_CODE_NAME_LEN;
+    case TLV_IPC_TYPE_MSGQ:
+        return 64;
+    case TLV_IPC_TYPE_UXSKT:
+        return 64;
+    case TLV_IPC_TYPE_CBK:
+        return sizeof(uintptr_t);
+    case TLV_IPC_NET_UDP_SKT:
+        return TLV_IPC_NET_SKT_LEN;
+    case TLV_DATA_128:
+        return 128;
+    case TLV_DATA_256:
+        return 256;
+    }
+    return 0;
+}
+
 #endif

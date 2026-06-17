@@ -111,7 +111,7 @@ std::shared_ptr<subscriber_db_entry_t> subscriber_db_create(uint32_t sub_id, cha
     }
     /*create a new subscriber and insert it into database*/
     auto new_subscriber = std::make_shared<subscriber_db_entry_t>();
-    std::shared_ptr<subscriber_db_entry_t> new_subscriber = std::make_shared<subscriber_db_entry_t>();
+    // std::shared_ptr<subscriber_db_entry_t> new_subscriber = std::make_shared<subscriber_db_entry_t>();
     // std::shared_ptr<subscriber_db_entry_t> new_subscriber = std::make_shared<subscriber_db_entry_t>(sub_id, sub_name);//default constructor is not enough for this!
     new_subscriber->subsriber_id = sub_id;
     strncpy(new_subscriber->sub_name, sub_name, sizeof(new_subscriber->sub_name));
