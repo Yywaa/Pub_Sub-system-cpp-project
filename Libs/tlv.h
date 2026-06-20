@@ -14,17 +14,17 @@
  *unsigned char* -tlv_ptr OUT
  *unsigned in -total_size(excluding first 8 bytes),IN
  */
-#define ITERATE_TLV_BEGIN(start_ptr, type, length, tl_ptr, tlv_size)                                                                                                                   \
-    {                                                                                                                                                                                  \
-        unsigned int _len = 0;                                                                                                                                                         \
-        char _tlv_value_size = 0;                                                                                                                                                      \
-        type = 0;                                                                                                                                                                      \
-        length = 0;                                                                                                                                                                    \
-        char *tlv_ptr = NULL;                                                                                                                                                          \
-        for (tlv_ptr = (char *)start_ptr + TVL_OVERHEAD_SIZE; _len < tlv_size; _len += _tlv_value_size + TVL_OVERHEAD_SIZE + length, tlv_ptr = (tlv_ptr + TVL_OVERHEAD_SIZE + length)) \
-        {                                                                                                                                                                              \
-            type = *(tlv_ptr - TVL_OVERHEAD_SIZE);                                                                                                                                     \
-            _tlv_value_size = char(*(tlv_ptr - TVL_OVERHEAD_SIZE + sizeof(char)));                                                                                                     \
+#define ITERATE_TLV_BEGIN(start_ptr, type, length, tlv_ptr, tlv_size)                                                                                                         \
+    {                                                                                                                                                                         \
+        unsigned int _len = 0;                                                                                                                                                \
+        char _tlv_value_size = 0;                                                                                                                                             \
+        type = 0;                                                                                                                                                             \
+        length = 0;                                                                                                                                                           \
+        char *tlv_ptr = NULL;                                                                                                                                                 \
+        for (tlv_ptr = (char *)start_ptr + TVL_OVERHEAD_SIZE; _len < tlv_size; _len += _tlv_value_size + TVL_OVERHEAD_SIZE, tlv_ptr = (tlv_ptr + TVL_OVERHEAD_SIZE + length)) \
+        {                                                                                                                                                                     \
+            type = *(tlv_ptr - TVL_OVERHEAD_SIZE);                                                                                                                            \
+            _tlv_value_size = char(*(tlv_ptr - TVL_OVERHEAD_SIZE + sizeof(char)));                                                                                            \
             length = _tlv_value_size;
 
 #define ITERATE_TLV_END \

@@ -287,7 +287,7 @@ void coord_db_display()
     }
 
     // print subscribers database
-    printf("Subscribers ID: \n");
+    printf("Subscribers DB: \n");
     for (auto it = sub_db.begin(); it != sub_db.end(); it++)
     {
         printf("Subscribers ID: %u,Subscribers name:%s\n", it->second->subsriber_id, it->second->sub_name);
@@ -302,7 +302,7 @@ void coord_db_display()
     }
 
     // printf message ID and its subscribers name
-    printf("Pub_Sub_db:\n");
+    printf("Pub_Sub_DB:\n");
     for (auto it = pub_sub_db.begin(); it != pub_sub_db.end(); it++)
     {
         // printf("Message ID:%u\n", it->first); //my code

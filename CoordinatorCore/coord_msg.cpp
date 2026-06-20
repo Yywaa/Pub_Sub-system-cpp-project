@@ -7,6 +7,8 @@
 #include "pubsub.h"
 #include "coordDB.h"
 
+// extern std::unordered_map<uint32_t, publisher_db_entry_t *> pub_db;
+
 static uint32_t coord_generate_id()
 {
     static uint32_t id = 0;
@@ -38,6 +40,20 @@ cmsg_t *coordinator_process_publisher_msg(cmsg_t *msg, size_t bytes_read)
         printf("Coordiantor: New Publisher Registered with Pub ID %u\n", PubEntry->publisher_id);
         return reply_msg; // send success registration back to publisher
     }
+    break;
+    case SUB_MSG_UNREGISTER:
+    {
+        auto it = pub_db.find(msg->id.publisher_id);
+        if (it != pub_db.end())
+        {
+            publisher_db_delete(msg->id.publisher_id);
+            printf("Coordinator: Publisher id: %u Un-Registered\n", msg->id.publisher_id);
+            // cmsg_t *reply_msg = cmsg_data_prepare2(COORD_TO_PUB, SUB_MSG_UNREGISTER, 0, 0);
+            // return reply_msg;
+        }
+    }
+    break;
+
     default:
         break;
     }

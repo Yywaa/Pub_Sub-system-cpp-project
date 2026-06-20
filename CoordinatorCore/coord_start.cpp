@@ -11,6 +11,7 @@
 #define COORD_RECV_Q_MAX_MSG_SIZE 2048
 extern void coord_db_display();
 extern cmsg_t *coordinator_process_publisher_msg(cmsg_t *msg, size_t bytes_read);
+extern cmsg_t *coordinator_process_subscriber_msg(cmsg_t *msg, size_t bytes_read);
 static void coordinator_fork_listener_thread();
 
 static void coordinator_reply(int sock_fd, cmsg_t *reply_msg, struct sockaddr_in *client_addr)
@@ -35,7 +36,7 @@ static void *coordinator_recv_msg_listen(void *arg)
     struct sockaddr_in server_addr, client_addr;
     if ((sock_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
-        printf("Coordinator: Error:Listenr Socket creation falied\n");
+        printf("Coordinator: Error:Listener Socket creation falied\n");
         exit(1);
     }
     server_addr.sin_family = AF_INET;
@@ -49,7 +50,7 @@ static void *coordinator_recv_msg_listen(void *arg)
         close(sock_fd);
         exit(1);
     }
-
+    printf("Coordinator : Listening for Requests...\n");
     while (1)
     {
         FD_ZERO(&readfds);
@@ -76,10 +77,25 @@ static void *coordinator_recv_msg_listen(void *arg)
                 coordinator_reply(sock_fd, reply_msg, &client_addr);
                 free(reply_msg);
             }
+            break;
         case SUBS_TO_COORD:
-            if (1)
+            if (msg->id.subscriber_id)
             {
+                printf("Coordinator : Received message from Subscriber id=%u\n", msg->id.subscriber_id);
             }
+            else
+            {
+                printf("Coordinator : Received message from New Subscriber\n");
+            }
+            cmsg_debug_print(msg);
+            reply_msg = coordinator_process_subscriber_msg(msg, bytes_read);
+            if (reply_msg)
+            {
+                coordinator_reply(sock_fd, reply_msg, &client_addr);
+                free(reply_msg);
+            }
+            break;
+        default:;
         }
     }
 }

@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 #include "pubsub.h"
+#include <unordered_map>
+
+extern std::unordered_map<uint32_t, publisher_db_entry_t *> pub_db;
 
 /*Publisher DB operation*/
 publisher_db_entry_t *publisher_db_create(uint32_t pub_id, char *pub_name);

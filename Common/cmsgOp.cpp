@@ -30,7 +30,7 @@ void cmsg_debug_print(cmsg_t *cmsg)
 
 cmsg_t *cmsg_data_prepare2(msg_type_t msg_type, sub_msg_type_t sub_msg_type, uint32_t msg_code, int trailing_space)
 {
-    cmsg_t *cmsg = (cmsg_t *)calloc(1, sizeof(cmsg_t) + trailing_space);
+    cmsg_t *cmsg = (cmsg_t *)calloc(1, sizeof(*cmsg) + trailing_space);
     cmsg->msg_id = 0;
     cmsg->msg_type = msg_type;
     cmsg->sub_msg_type = sub_msg_type;

@@ -1,0 +1,14 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "clientlib/client.o",
+      "clientlib/client.cpp"
+    ],
+    "directory": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject",
+    "file": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/clientlib/client.cpp",
+    "output": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/clientlib/client.o"
+  }
+]
