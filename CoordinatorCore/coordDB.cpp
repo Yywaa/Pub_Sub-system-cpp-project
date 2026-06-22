@@ -11,7 +11,7 @@
 #include <stddef.h>
 #include "pubsub.h"
 
-std::unordered_map<uint32_t, publisher_db_entry_t *> pub_db;                  // a collection of publishers,first para is message ID it published, second is publisher instance
+std::unordered_map<uint32_t, publisher_db_entry_t *> pub_db;                  // a collection of publishers,first para is publisher ID , second is publisher instance
 std::unordered_map<uint32_t, std ::shared_ptr<subscriber_db_entry_t>> sub_db; // a collection of subscribers, first para  is message ID subscriber subscribed to
 std::unordered_map<uint32_t, pub_sub_db_entry_t *> pub_sub_db;                // first para is message ID, second is list of subscribers subscribed to this message
 

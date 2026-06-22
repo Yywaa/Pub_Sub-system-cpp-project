@@ -35,7 +35,25 @@ void *pub_skt_example(void *arg)
     coordinator_register(sock_fd, "Pub1", PUB_TO_COORD);
     rc = recvfrom(sock_fd, (char *)&cmsg, sizeof(cmsg), 0, NULL, NULL); // wait response from coordinator
     printf("Pub Msg ID allocated = %u\n", cmsg.id.publisher_id);
-    int pub_id = cmsg.id.subscriber_id;
+    int pub_id = cmsg.id.publisher_id;
+
+    printf("Press any key to publish message 100\n");
+
+    getchar();
+    publisher_publish(sock_fd, pub_id, 100);
+
+    printf("Press any key to publish message 200\n");
+
+    getchar();
+    publisher_publish(sock_fd, pub_id, 200);
+
+    printf("Press any key to unpublish message 100\n");
+    getchar();
+    publisher_unpublish(sock_fd, pub_id, 100);
+
+    printf("Press any key to unpublish message 200\n");
+    publisher_unpublish(sock_fd, pub_id, 200);
+
     printf("Press any key to Unregister Publiser\n");
     getchar();
     coordinator_unregister(sock_fd, pub_id, PUB_TO_COORD); // publisher unregister message, will receive nothing from coordinator!

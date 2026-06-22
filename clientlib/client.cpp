@@ -52,3 +52,80 @@ void coordinator_unregister(int sock_fd, uint32_t pub_sub_id, msg_type_t msg_typ
     // cmsg_debug_print(msg);
     free(msg);
 }
+
+void publisher_publish(int sock_fd, uint32_t pub_id, uint32_t msg_code)
+{
+    cmsg_t *msg = (cmsg_t *)calloc(1, sizeof(*msg));
+    msg->msg_id = 0;                 // This will be assigned by coordinator
+    msg->msg_type = PUB_TO_COORD;    //
+    msg->sub_msg_type = SUB_MSG_ADD; // this measn publisher publish or subscriber subscribe new message
+    msg->msg_code = msg_code;
+    msg->id.publisher_id = pub_id; // This will be assigned by coordinator
+    msg->id.subscriber_id = pub_id;
+    msg->tlv_buffer_size = 0;
+
+    int rc = pub_sub_dispatch_cmsg(sock_fd, msg);
+    if (rc < 0)
+    {
+        printf("Client : Publisher publish Error : Send Failed, errno = %d\n", errno);
+        cmsg_debug_print(msg);
+    }
+    free(msg);
+}
+void publisher_unpublish(int sock_fd, uint32_t pub_id, uint32_t msg_code)
+{
+    cmsg_t *msg = (cmsg_t *)calloc(1, sizeof(*msg));
+    msg->msg_id = 0;                    // This will be assigned by coordinator
+    msg->msg_type = PUB_TO_COORD;       //
+    msg->sub_msg_type = SUB_MSG_DELETE; // this measn publisher publish or subscriber subscribe new message
+    msg->msg_code = msg_code;
+    msg->id.publisher_id = pub_id; // This will be assigned by coordinator
+    msg->id.subscriber_id = pub_id;
+    msg->tlv_buffer_size = 0;
+
+    int rc = pub_sub_dispatch_cmsg(sock_fd, msg);
+    if (rc < 0)
+    {
+        printf("Client : Publisher unpublish Error : Send Failed, errno = %d\n", errno);
+        cmsg_debug_print(msg);
+    }
+    free(msg);
+}
+void subscriber_subscribe(int sock_fd, uint32_t sub_id, uint32_t msg_id)
+{
+    cmsg_t *msg = (cmsg_t *)calloc(1, sizeof(*msg));
+    msg->msg_id = msg_id;
+    msg->msg_type = SUBS_TO_COORD;
+    msg->sub_msg_type = SUB_MSG_ADD;
+    msg->msg_code = msg_id;
+    msg->id.publisher_id = sub_id;
+    msg->id.subscriber_id = sub_id;
+    msg->tlv_buffer_size = 0;
+
+    int rc = pub_sub_dispatch_cmsg(sock_fd, msg);
+    if (rc < 0)
+    {
+        printf("Client: Subscriber subscribe Error : Send Failed! error = %d\n", errno);
+        cmsg_debug_print(msg);
+    }
+    free(msg);
+}
+void subscriber_unsubscribe(int sock_fd, uint32_t sub_id, uint32_t msg_id)
+{
+    cmsg_t *msg = (cmsg_t *)calloc(1, sizeof(*msg));
+    msg->msg_id = msg_id;
+    msg->msg_type = SUBS_TO_COORD;
+    msg->sub_msg_type = SUB_MSG_DELETE;
+    msg->msg_code = msg_id;
+    msg->id.publisher_id = sub_id;
+    msg->id.subscriber_id = sub_id;
+    msg->tlv_buffer_size = 0;
+
+    int rc = pub_sub_dispatch_cmsg(sock_fd, msg);
+    if (rc < 0)
+    {
+        printf("Client: Subscriber unsubscribe Error : Send Failed! error = %d\n", errno);
+        cmsg_debug_print(msg);
+    }
+    free(msg);
+}

@@ -12,7 +12,7 @@ publisher_db_entry_t *publisher_db_create(uint32_t pub_id, char *pub_name);
 
 void publisher_db_delete(uint32_t pub_id);
 bool publisher_publish_msg(uint32_t pub_id, uint32_t published_msg_id);
-bool publisher_ubpublish_msg(uint32_t pub_id, uint32_t published_msg_id);
+bool publisher_unpublish_msg(uint32_t pub_id, uint32_t published_msg_id);
 
 /****Subscriber DB Operations */
 typedef struct subscriber_db_entry_ subscriber_db_entry_t;

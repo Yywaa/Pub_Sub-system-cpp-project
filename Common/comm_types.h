@@ -34,7 +34,7 @@ typedef enum
     SUB_MSG_REGISTER,   // subscriber or publisher register or unregister a massge
     SUB_MSG_UNREGISTER, // subscriber or publisher register or unregister a massge
     SUB_MSG_ID_ALLOC_SUCCESS,
-    SUB_NSG_IPC_CHANNEL_ADD,
+    SUB_MSG_IPC_CHANNEL_ADD,
     SUB_MSG_ERROR, // error
 
 } sub_msg_type_t;
