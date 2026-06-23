@@ -36,6 +36,23 @@ void *sub_skt_example(void *arg)
     rc = recvfrom(sock_fd, (char *)&cmsg, sizeof(cmsg), 0, NULL, NULL); // wait for response from coordinator
     printf("Sub Msg ID allocated = %u\n", cmsg.id.subscriber_id);       // here, should be Sub ID?
     int sub_id = cmsg.id.subscriber_id;
+
+    printf("Press any key to subscriber message 100\n");
+    getchar();
+    subscriber_subscribe(sock_fd, sub_id, 100);
+
+    printf("Press any key to subscribe message 200\n");
+    getchar();
+    subscriber_subscribe(sock_fd, sub_id, 200);
+
+    printf("Press any key to Unsubscribe message 100\n");
+    getchar();
+    subscriber_unsubscribe(sock_fd, sub_id, 100);
+
+    printf("Press any key to Unscriber message 200\n");
+    getchar();
+    subscriber_unsubscribe(sock_fd, sub_id, 200);
+
     printf("Press any key to Unregister Subscriber\n");
     getchar();
     coordinator_unregister(sock_fd, sub_id, SUBS_TO_COORD);
