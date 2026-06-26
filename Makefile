@@ -5,6 +5,7 @@ TARGET1=clientlib/libclient.a  #static library, compiled seperately
 TARGET2=CoordinatorCore/libcoord.a
 TARGET3=CoordinatorCore/coordinator.exe
 TARGET4=pub_sub_examples/pub_skt_main.exe  #public socket exctuable 
+TARGET5=pub_sub_examples/sub_skt_main.exe #subcriber socket
 
 TARGET: ${TARGET1} ${TARGET2} ${TARGET3} ${TARGET4} ${TARGET5}
 
@@ -32,9 +33,9 @@ ${TARGET3}:CoordinatorCore/coord_main.o ${COORDINATOR_OBJS}
 ${TARGET4}:pub_sub_examples/pub_skt_main.o pub_sub_examples/pub_skt_example.o ${TARGET1}
 	@echo "Building publisher socket executable"
 	${CC} -g pub_sub_examples/pub_skt_main.o pub_sub_examples/pub_skt_example.o -o ${TARGET4} ${CLIENTLIBS}
-${TARGET5}:pub_sub_examples/pub_skt_main.o pub_sub_examples/sub_skt_example.o -o ${TARGET5} ${CLIENTLIBS}
+${TARGET5}:pub_sub_examples/sub_skt_main.o pub_sub_examples/sub_skt_example.o  ${TARGET1}
 	@echo "Building subscriber socket executable"
-	${CC} -g pub_sub_examples/sub_skt_main.o pub_sub_examples/sub_skt_main.o -o ${TARGET5} ${CLIENTLIBS}
+	${CC} -g pub_sub_examples/sub_skt_main.o pub_sub_examples/sub_skt_example.o -o ${TARGET5} ${CLIENTLIBS}
 
 CoordinatorCore/coord_main.o:CoordinatorCore/coord_main.cpp
 	${CC} ${CFLAGS} CoordinatorCore/coord_main.cpp -o CoordinatorCore/coord_main.o
@@ -50,8 +51,8 @@ Common/cmsgOp.o:Common/cmsgOp.cpp
 	${CC} ${CFLAGS} Common/cmsgOp.cpp -o Common/cmsgOp.o
 pub_sub_examples/pub_skt_main.o: pub_sub_examples/pub_skt_main.cpp
 	${CC} ${CFLAGS} pub_sub_examples/pub_skt_main.cpp -o pub_sub_examples/pub_skt_main.o
-pub_sub_examples/pub_skt_example.o: pub_sub_examples/pub_skt_example.cpp
-	${CC} ${CFLAGS} pub_sub_examples/pub_skt_example.cpp -o pub_sub_examples/pub_skt_example.o
+pub_sub_examples/sub_skt_main.o: pub_sub_examples/sub_skt_main.cpp
+	${CC} ${CFLAGS} pub_sub_examples/sub_skt_main.cpp -o pub_sub_examples/sub_skt_main.o
 
 clean:
 	rm -f *.a

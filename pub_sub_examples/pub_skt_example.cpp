@@ -22,11 +22,19 @@ void *pub_skt_example(void *arg)
     }
     struct sockaddr_in self_addr;
     self_addr.sin_family = AF_INET;
-    self_addr.sin_port = htons(PUB_SKT_UDP_PORT_NO);
+    if (argument_port_no)
+    {
+        self_addr.sin_port = htons(argument_port_no);
+    }
+    else
+    {
+        self_addr.sin_port = htons(PUB_SKT_UDP_PORT_NO);
+    }
+
     self_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     if (bind(sock_fd, (struct sockaddr *)&self_addr, sizeof(struct sockaddr)))
     {
-        printf("Coordiantor : Error :bind failed\n");
+        printf("Coordinator : Error :bind failed\n");
         close(sock_fd);
         exit(1);
     }
@@ -52,6 +60,7 @@ void *pub_skt_example(void *arg)
     publisher_unpublish(sock_fd, pub_id, 100);
 
     printf("Press any key to unpublish message 200\n");
+    getchar();
     publisher_unpublish(sock_fd, pub_id, 200);
 
     printf("Press any key to Unregister Publiser\n");

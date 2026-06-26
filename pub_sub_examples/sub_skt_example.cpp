@@ -22,7 +22,15 @@ void *sub_skt_example(void *arg)
     }
     struct sockaddr_in self_addr;
     self_addr.sin_family = AF_INET;
-    self_addr.sin_port = htons(SUB_SKT_UDP_PORT_NO);
+    if (argument_port_no)
+    {
+        self_addr.sin_port = htons(argument_port_no);
+    }
+    else
+    {
+        self_addr.sin_port = htons(SUB_SKT_UDP_PORT_NO);
+    }
+
     self_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     if (bind(sock_fd, (struct sockaddr *)&self_addr, sizeof(struct sockaddr)))
     {

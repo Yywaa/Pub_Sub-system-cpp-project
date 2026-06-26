@@ -56,7 +56,7 @@ cmsg_t *coordinator_process_publisher_msg(cmsg_t *msg, size_t bytes_read)
     break;
     case SUB_MSG_ADD:
     {
-        int rc = publisher_publish_msg(msg->id.publisher_id, msg->msg_id);
+        int rc = publisher_publish_msg(msg->id.publisher_id, msg->msg_code);
         if (!rc)
         {
             printf("Coordinator : Error: New Msg Publishing Failed by publisher ID%u\n", msg->id.publisher_id);
@@ -65,7 +65,7 @@ cmsg_t *coordinator_process_publisher_msg(cmsg_t *msg, size_t bytes_read)
     break;
     case SUB_MSG_DELETE:
     {
-        int rc = publisher_unpublish_msg(msg->id.publisher_id, msg->msg_id);
+        int rc = publisher_unpublish_msg(msg->id.publisher_id, msg->msg_code);
         break;
     }
 
@@ -93,6 +93,7 @@ cmsg_t *coordinator_process_subscriber_msg(cmsg_t *msg, size_t bytes_read)
     case SUB_MSG_DELETE:
     {
         bool rc = subscriber_unsubscribe_msg(msg->id.subscriber_id, msg->msg_code);
+        break;
     }
 
     case SUB_MSG_REGISTER:

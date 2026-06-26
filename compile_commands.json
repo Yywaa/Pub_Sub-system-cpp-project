@@ -98,8 +98,6 @@
   {
     "arguments": [
       "/usr/bin/g++",
-      "-std=c++20",
-      "-g",
       "-c",
       "-o",
       "pub_sub_examples/pub_skt_example.o",
@@ -108,5 +106,31 @@
     "directory": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject",
     "file": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/pub_sub_examples/pub_skt_example.cpp",
     "output": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/pub_sub_examples/pub_skt_example.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++20",
+      "-g",
+      "-c",
+      "-o",
+      "pub_sub_examples/sub_skt_main.o",
+      "pub_sub_examples/sub_skt_main.cpp"
+    ],
+    "directory": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject",
+    "file": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/pub_sub_examples/sub_skt_main.cpp",
+    "output": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/pub_sub_examples/sub_skt_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-o",
+      "pub_sub_examples/sub_skt_example.o",
+      "pub_sub_examples/sub_skt_example.cpp"
+    ],
+    "directory": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject",
+    "file": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/pub_sub_examples/sub_skt_example.cpp",
+    "output": "/home/yyw/Pub_SubProject/Pub_Sub_CppProject/pub_sub_examples/sub_skt_example.o"
   }
 ]

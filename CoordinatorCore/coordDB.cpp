@@ -281,7 +281,7 @@ void coord_db_display()
         {
             if (it->second->published_msg_ids[i])
             {
-                printf("Published Message ID:%u\n", it->second->published_msg_ids[i]);
+                printf("  Publisher ID: %u  Published Message ID:%u\n", it->second->publisher_id, it->second->published_msg_ids[i]);
             }
         }
     }
@@ -296,7 +296,7 @@ void coord_db_display()
         {
             if (it->second->subscriber_msg_ids[i])
             {
-                printf("Subscribed Message ID: %u\n", it->second->subscriber_msg_ids[i]);
+                printf("    Subscriber ID: %u,Subscribed Message ID: %u\n", it->second->subsriber_id, it->second->subscriber_msg_ids[i]);
             }
         }
     }
