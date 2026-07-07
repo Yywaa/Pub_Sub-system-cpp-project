@@ -13,6 +13,7 @@ extern void coord_db_display();
 extern cmsg_t *coordinator_process_publisher_msg(cmsg_t *msg, size_t bytes_read);
 extern cmsg_t *coordinator_process_subscriber_msg(cmsg_t *msg, size_t bytes_read);
 static void coordinator_fork_listener_thread();
+extern void coordiantor_fork_distributon_threads();
 
 static void coordinator_reply(int sock_fd, cmsg_t *reply_msg, struct sockaddr_in *client_addr)
 {
@@ -114,7 +115,7 @@ static void coordinator_fork_listener_thread()
 void coordinator_main()
 {
     coordinator_fork_listener_thread();
-    // coordiantor_for_distributon_threads();
+    coordiantor_fork_distributon_threads();
     while (true)
     {
         coord_db_display();

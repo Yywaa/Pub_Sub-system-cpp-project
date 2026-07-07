@@ -10,6 +10,8 @@
 
 // extern std::unordered_map<uint32_t, publisher_db_entry_t *> pub_db;
 
+extern void coordinator_accept_pubmsg_for_distribution_to_subcriber(cmsg_t *cmsg);
+
 static uint32_t coord_generate_id()
 {
     static uint32_t id = 0;
@@ -68,7 +70,11 @@ cmsg_t *coordinator_process_publisher_msg(cmsg_t *msg, size_t bytes_read)
         int rc = publisher_unpublish_msg(msg->id.publisher_id, msg->msg_code);
         break;
     }
-
+    case SUB_MSG_DATA:
+    {
+        coordinator_accept_pubmsg_for_distribution_to_subcriber(msg);
+        break;
+    }
     default:
         break;
     }

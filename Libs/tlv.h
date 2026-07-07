@@ -5,7 +5,7 @@
 #include <memory>
 #include <string.h>
 
-#define TVL_OVERHEAD_SIZE 2
+#define TLV_OVERHEAD_SIZE 2
 
 /*MACRO To Type Length Value reply
  *char* -start_ptr, IN
@@ -21,10 +21,10 @@
         type = 0;                                                                                                                                                             \
         length = 0;                                                                                                                                                           \
         char *tlv_ptr = NULL;                                                                                                                                                 \
-        for (tlv_ptr = (char *)start_ptr + TVL_OVERHEAD_SIZE; _len < tlv_size; _len += _tlv_value_size + TVL_OVERHEAD_SIZE, tlv_ptr = (tlv_ptr + TVL_OVERHEAD_SIZE + length)) \
+        for (tlv_ptr = (char *)start_ptr + TLV_OVERHEAD_SIZE; _len < tlv_size; _len += _tlv_value_size + TLV_OVERHEAD_SIZE, tlv_ptr = (tlv_ptr + TLV_OVERHEAD_SIZE + length)) \
         {                                                                                                                                                                     \
-            type = *(tlv_ptr - TVL_OVERHEAD_SIZE);                                                                                                                            \
-            _tlv_value_size = char(*(tlv_ptr - TVL_OVERHEAD_SIZE + sizeof(char)));                                                                                            \
+            type = *(tlv_ptr - TLV_OVERHEAD_SIZE);                                                                                                                            \
+            _tlv_value_size = char(*(tlv_ptr - TLV_OVERHEAD_SIZE + sizeof(char)));                                                                                            \
             length = _tlv_value_size;
 
 #define ITERATE_TLV_END \
@@ -37,9 +37,9 @@ static inline char *tlv_buffer_inser_tlv(char *buff, uint8_t tlv_no, uint8_t dat
     *(buff + 1) = data_len;
     if (data)
     {
-        memcpy(buff + TVL_OVERHEAD_SIZE, data, data_len);
+        memcpy(buff + TLV_OVERHEAD_SIZE, data, data_len);
     }
-    return buff + TVL_OVERHEAD_SIZE + data_len;
+    return buff + TLV_OVERHEAD_SIZE + data_len;
 }
 
 static inline char *tlv_buffer_get_particualr_tlv(char *tlv_buff, uint32_t tlv_buff_size, uint8_t tlv_no, uint8_t *tlv_data_len)

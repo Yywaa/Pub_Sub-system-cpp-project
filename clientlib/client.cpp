@@ -18,13 +18,13 @@ int pub_sub_dispatch_cmsg(int sock_fd, cmsg_t *cmsg)
 }
 void coordinator_register(int sock_fd, const char *entity_name, msg_type_t msg_type)
 {
-    cmsg_t *cmsg = (cmsg_t *)calloc(1, sizeof(*cmsg) + TVL_OVERHEAD_SIZE + TLV_CODE_NAME_LEN);
+    cmsg_t *cmsg = (cmsg_t *)calloc(1, sizeof(*cmsg) + TLV_OVERHEAD_SIZE + TLV_CODE_NAME_LEN);
     cmsg->msg_id = 0;
     cmsg->msg_type = msg_type;
     cmsg->sub_msg_type = SUB_MSG_REGISTER;
     cmsg->id.publisher_id = 0; // coordinator will generate for it
     cmsg->id.subscriber_id = 0;
-    cmsg->tlv_buffer_size = TVL_OVERHEAD_SIZE + TLV_CODE_NAME_LEN;
+    cmsg->tlv_buffer_size = TLV_OVERHEAD_SIZE + TLV_CODE_NAME_LEN;
     char *tlv_buffer = (char *)cmsg->tlv_buffer;
     tlv_buffer_inser_tlv(tlv_buffer, TLV_CODE_NAME, TLV_CODE_NAME_LEN, (char *)entity_name);
     int rc = pub_sub_dispatch_cmsg(sock_fd, cmsg); // pub_sub_dispatch_msg is used by publisher and subscriber

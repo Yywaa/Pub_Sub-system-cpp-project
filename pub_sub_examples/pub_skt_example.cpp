@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include "../Common/comm_types.h"
 #include "../clientlib/client.h"
+#include "../Libs/tlv.h"
 
 // udp port no
 #define PUB_SKT_UDP_PORT_NO 50000
@@ -54,6 +55,16 @@ void *pub_skt_example(void *arg)
 
     getchar();
     publisher_publish(sock_fd, pub_id, 200);
+    // Publisher send a message data to the Coordinator of Msg Type 100
+    printf("Press any key to send cmsg-data to Coordinator\n");
+    getchar();
+    cmsg_t *data_cmsg = cmsg_data_prepare2(PUB_TO_COORD, SUB_MSG_DATA, 100, TLV_OVERHEAD_SIZE + tlv_data_len(TLV_DATA_128));
+    data_cmsg->id.publisher_id = pub_id;
+    data_cmsg->priority = CMSG_PR_HI;
+    data_cmsg->ref_count = 1;
+    char *tlv_buffer = data_cmsg->tlv_buffer;
+    tlv_buffer_inser_tlv(tlv_buffer, data_cmsg->tlv_buffer_size, TLV_DATA_128, (char *)"Sample Data Sent vy PUB1");
+    pub_sub_dispatch_cmsg(sock_fd, data_cmsg);
 
     printf("Press any key to unpublish message 100\n");
     getchar();

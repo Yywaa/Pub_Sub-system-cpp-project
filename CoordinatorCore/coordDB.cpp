@@ -194,13 +194,13 @@ pub_sub_db_entry_t *pub_sub_db_create(uint32_t msg_id, std::shared_ptr<subscribe
         new_entry->publish_msg_code = msg_id;
         new_entry->subscribers.push_back(SubEntry);
         pub_sub_db[msg_id] = new_entry;
-        std::cout << "Created a new pub_sub_db entry fro msg_id: " << msg_id << "\n"
+        std::cout << "Created a new pub_sub_db entry for msg_id: " << msg_id << "\n"
                   << std::endl;
         return new_entry;
     }
     // Update existing entry
     pub_sub_db_entry_t *existing_entry = it->second;
-    it->second->subscribers.push_back(SubEntry);
+    // it->second->subscribers.push_back(SubEntry);
     existing_entry->subscribers.push_back(SubEntry);
     std::cout << "Updated exiting pub_sub_db entry for msg_id" << msg_id << std::endl;
     return existing_entry;
@@ -310,7 +310,7 @@ void coord_db_display()
         for (auto iter = it->second->subscribers.begin(); iter != it->second->subscribers.end(); iter++)
         {
             // printf("Subscribers name:%s\n", (*iter)->sub_name);
-            printf("Subscribers ID:%u\n", (*iter)->subsriber_id);
+            printf("  Subscribers ID:%u\n", (*iter)->subsriber_id);
         }
         // advanced
         /*

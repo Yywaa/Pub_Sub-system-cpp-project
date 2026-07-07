@@ -2,6 +2,8 @@
 #define COMM_TYPE__
 
 #include <stdint.h>
+#include <assert.h>
+#include <stdlib.h>
 
 #define COORD_IP_ADDR 2130706433 // 127.0.0.1
 #define COORD_UDP_PORT 40000
@@ -81,6 +83,7 @@ typedef struct cmsg_
         uint32_t publisher_id;
         uint32_t subscriber_id;
     } id;                     // I think it's better as pub_sub_id
+    uint32_t ref_count;       // reference count similar smart pointer,
     uint16_t tlv_buffer_size; // this value represents tlv_buffer size below
     char tlv_buffer[0];
 
@@ -182,6 +185,22 @@ static int tlv_data_len(int tlv_code_point)
         return 256;
     }
     return 0;
+}
+static inline void cmsg_reference(cmsg_t *cmsg)
+{
+    cmsg->ref_count++;
+}
+
+// static inline function, placed in head file
+static inline void cmsg_dereference(cmsg_t *cmsg)
+{
+    assert(cmsg->ref_count);
+    cmsg->ref_count--;
+    if (cmsg->ref_count)
+    {
+        return;
+    }
+    free(cmsg);
 }
 
 #endif

@@ -17,6 +17,7 @@ COORDINATOR_OBJS=CoordinatorCore/coord_start.o\
 				CoordinatorCore/coordDB.o	\
 				CoordinatorCore/coord_msg.o		\
 				Common/cmsgOp.o					\
+				CoordinatorCore/CoordDistribution.o
 
 CLIENTLIBS=-Lclientlib -lclient
 ${TARGET1}:clientlib/client.o Common/cmsgOp.o
@@ -45,6 +46,8 @@ CoordinatorCore/coord_start.o: CoordinatorCore/coord_start.cpp
 
 CoordinatorCore/coordDB.o:CoordinatorCore/coordDB.cpp
 	${CC} ${CFLAGS} CoordinatorCore/coordDB.cpp -o CoordinatorCore/coordDB.o
+CoordinatorCore/CoordDistribution.o:CoordinatorCore/CoordDistribution.cpp
+	${CC} ${CFLAGS} CoordinatorCore/CoordDistribution.cpp -o CoordinatorCore/CoordDistribution.o
 CoordinatorCore/coord_msg.o:CoordinatorCore/coord_msg.cpp
 	${CC} ${CFLAGS} CoordinatorCore/coord_msg.cpp -o CoordinatorCore/coord_msg.o
 Common/cmsgOp.o:Common/cmsgOp.cpp
