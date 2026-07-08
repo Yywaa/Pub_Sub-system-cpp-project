@@ -63,7 +63,7 @@ void *pub_skt_example(void *arg)
     data_cmsg->priority = CMSG_PR_HI;
     data_cmsg->ref_count = 1;
     char *tlv_buffer = data_cmsg->tlv_buffer;
-    tlv_buffer_inser_tlv(tlv_buffer, data_cmsg->tlv_buffer_size, TLV_DATA_128, (char *)"Sample Data Sent vy PUB1");
+    tlv_buffer_inser_tlv(tlv_buffer, TLV_DATA_128, tlv_data_len(TLV_DATA_128), (char *)"Sample Data Sent by PUB1");
     pub_sub_dispatch_cmsg(sock_fd, data_cmsg);
 
     printf("Press any key to unpublish message 100\n");

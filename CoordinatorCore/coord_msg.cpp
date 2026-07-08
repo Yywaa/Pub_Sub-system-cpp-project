@@ -7,6 +7,7 @@
 #include "pubsub.h"
 #include "coordDB.h"
 #include "../clientlib/client.h"
+#include <iostream>
 
 // extern std::unordered_map<uint32_t, publisher_db_entry_t *> pub_db;
 
@@ -15,6 +16,7 @@ extern void coordinator_accept_pubmsg_for_distribution_to_subcriber(cmsg_t *cmsg
 static uint32_t coord_generate_id()
 {
     static uint32_t id = 0;
+
     return ++id;
 }
 
