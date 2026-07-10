@@ -291,6 +291,8 @@ void coord_db_display()
     for (auto it = sub_db.begin(); it != sub_db.end(); it++)
     {
         printf("Subscribers ID: %u,Subscribers name:%s\n", it->second->subsriber_id, it->second->sub_name);
+        // IPC type is number, a helper function needed if we want to change 0 to string (0 for  IPC_TYPE_NONE)
+        printf("IPC type for subscriber ID : %u is %u \n", it->second->subsriber_id, it->second->ipc_type);
         /*print subscriberd messages*/
         for (int i = 0; i < MAX_SUBSCRIBED_MSG; i++)
         {

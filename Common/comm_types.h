@@ -16,6 +16,9 @@
 #define TLV_IPC_TYPE_UXSKT 3 // TLV size 2 Bytes
 #define TLV_IPC_TYPE_CBK 4
 #define TLV_IPC_NET_UDP_SKT 5
+#define TLV_IPC_TYPE_MSGQ_LEN 32
+#define TLV_IPC_TYPE_UXSKT_LEN 32
+#define TLV_IPC_TYPE_CBK_LEN (sizeof(uintptr_t))
 #define TLV_DATA_128 6
 #define TLV_DATA_256 7
 
@@ -37,9 +40,21 @@ typedef enum
     SUB_MSG_UNREGISTER, // subscriber or publisher register or unregister a massge
     SUB_MSG_ID_ALLOC_SUCCESS,
     SUB_MSG_IPC_CHANNEL_ADD,
+    SUB_MSG_IPC_CHANNEL_REMOVE,
     SUB_MSG_ERROR, // error
 
 } sub_msg_type_t;
+
+typedef enum
+{
+    IPC_TYPE_NONE,
+    IPC_TYPE_NETSKT,
+    IPC_TYPE_MSGQ,
+    IPC_TYPE_UXSKT,
+    IPC_TYPE_SHM,
+    IPC_TYPE_CBK,
+
+} ipc_type_t;
 
 typedef enum
 {

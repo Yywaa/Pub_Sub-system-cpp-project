@@ -6,6 +6,7 @@
 #include <errno.h>
 #include "../Libs/tlv.h"
 #include "client.h"
+#include "../Common/comm_types.h"
 
 int pub_sub_dispatch_cmsg(int sock_fd, cmsg_t *cmsg)
 {
@@ -128,4 +129,21 @@ void subscriber_unsubscribe(int sock_fd, uint32_t sub_id, uint32_t msg_id)
         cmsg_debug_print(msg);
     }
     free(msg);
+}
+
+static int ipc_type_to_tlv_type(ipc_type_t ipc_type)
+{
+    switch (ipc_type)
+    {
+    case IPC_TYPE_MSGQ:
+        return TLV_IPC_TYPE_MSGQ;
+    case IPC_TYPE_UXSKT:
+        return TLV_IPC_TYPE_UXSKT;
+    case IPC_TYPE_NETSKT:
+        return TLV_IPC_NET_UDP_SKT;
+    case IPC_TYPE_CBK:
+        return TLV_IPC_TYPE_CBK;
+    default:
+        return 0;
+    }
 }
