@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "comm_types.h"
 typedef struct cmsg_ cmsg_t;
-typedef void (*pub_sub_cbk_t)(cmsg_t);
+typedef void (*pub_sub_cbk_t)(cmsg_t *);
 
 typedef union ipc_struct
 {
@@ -25,7 +25,7 @@ typedef union ipc_struct
     // Unix socket
     struct
     {
-        uint32_t UnixSktName[64]; // unique name on machine level
+        char UnixSktName[64]; // unique name on machine level
     } uxskt;
 
     // function pointer; callback method

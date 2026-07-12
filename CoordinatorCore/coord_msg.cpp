@@ -131,7 +131,9 @@ cmsg_t *coordinator_process_subscriber_msg(cmsg_t *msg, size_t bytes_read)
     }
     case SUB_MSG_IPC_CHANNEL_ADD:
     {
+        bool rc = coordinator_process_subscriber_ipc_subcription(msg->id.subscriber_id, msg);
     }
+    break;
     }
 
     return nullptr;

@@ -21,6 +21,7 @@ std::shared_ptr<subscriber_db_entry_t> subscriber_db_create(uint32_t sub_id, cha
 void subscriber_db_delete(uint32_t sub_id);
 bool subscriber_subscribe_msg(uint32_t sub_id, uint32_t msg_id);
 bool subscriber_unsubscribe_msg(uint32_t sub_id, uint32_t msg_id);
+bool coordinator_process_subscriber_ipc_subcription(uint32_t sub_id, cmsg_t *cmsg);
 
 /****Pub-sub DB operation */
 

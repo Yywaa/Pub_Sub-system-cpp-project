@@ -11,6 +11,8 @@
 
 #define COORD_DIST_QUEUES_MAX 2
 static class CoordDistQueue *gdist_queue[COORD_DIST_QUEUES_MAX] = {0};
+
+void coordinator_dispatch(std::shared_ptr<subscriber_db_entry_t> SubEntry, cmsg_t *cmsg);
 typedef struct
 {
     cmsg_t *cmsg;
@@ -96,7 +98,7 @@ static void coordinator_enqueue_distribution_queue(cmsg_t *cmsg, std::shared_ptr
     vdata->sub_entry = SubEntry;
     gdist_queue[queue_index]->Enqueue(vdata);
     queue_index++;
-    printf("Coordinator : [cmsg, Sub :%s]Enqueue in Distribution Queue\n", SubEntry->sub_name);
+    printf("Coordinator : [cmsg, Sub :%s] Enqueue in Distribution Queue\n", SubEntry->sub_name);
 }
 
 // below function works to transfer message from coordintor listen thread to distribution thread
@@ -113,11 +115,6 @@ void coordinator_accept_pubmsg_for_distribution_to_subcriber(cmsg_t *cmsg)
     {
         coordinator_enqueue_distribution_queue(cmsg, sub_entry);
     }
-}
-
-void coordinator_dispatch(std::shared_ptr<subscriber_db_entry_t> SubEntry, cmsg_t *cmsg)
-{
-    printf("Distributing cmsg %u to Subcriber %s[%u]\n", cmsg->msg_id, SubEntry->sub_name, SubEntry->subsriber_id);
 }
 
 // listen on the distribution queue and dispatch message to subscriber
@@ -147,5 +144,87 @@ void coordiantor_fork_distributon_threads()
             thread = (pthread_t *)calloc(1, sizeof(pthread_t));
             pthread_create(thread, NULL, coordinator_listen_distribution_queue, (void *)gdist_queue[i]);
         }
+    }
+}
+
+void coordinator_dispatch(std::shared_ptr<subscriber_db_entry_t> SubEntry, cmsg_t *cmsg)
+{
+    printf("Distributing cmsg %u to Subcriber %s[%u]\n", cmsg->msg_id, SubEntry->sub_name, SubEntry->subsriber_id);
+    cmsg_debug_print(cmsg);
+    // Send message to subscriber
+    if (SubEntry->ipc_type == IPC_TYPE_NONE)
+    {
+        printf("Coordinator :Error : Subscriber [%s, %u] IPC Channle Not Set\n", SubEntry->sub_name, SubEntry->subsriber_id);
+        return;
+    }
+    switch (SubEntry->ipc_type)
+    {
+    case IPC_TYPE_NETSKT:
+    {
+        printf("Coordinator : Dispatching message to subscriber [%s,%u] over NETSKT\n", SubEntry->sub_name, SubEntry->subsriber_id);
+        uint32_t ip_addr = SubEntry->ipc_struct.netskt.ip_addr;
+        uint16_t port = SubEntry->ipc_struct.netskt.port;
+        uint8_t transport_type = SubEntry->ipc_struct.netskt.transport_type;
+        if (transport_type != IPPROTO_UDP)
+        {
+            printf("Coordinator : Error: Unsupported Transport Type %u\n", transport_type);
+        }
+        struct sockaddr_in server_addr;
+        server_addr.sin_family = AF_INET;
+        server_addr.sin_port = htons(port);
+        server_addr.sin_addr.s_addr = htonl(ip_addr);
+
+        // if socket exits
+        if (SubEntry->ipc_struct.netskt.sock_fd > 0)
+        {
+            int rc = sendto(SubEntry->ipc_struct.netskt.sock_fd, (char *)cmsg, sizeof(*cmsg) + cmsg->tlv_buffer_size, 0, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
+            if (rc < 0)
+            {
+                printf("Coordinator : Error :Send Failed, errno = %d\n", errno);
+            }
+            break;
+        }
+        // if socket not exist, create one
+        int sock_fd = socket(AF_INET, SOCK_DGRAM, transport_type);
+        if (sock_fd < 0)
+        {
+            printf("Coordinator : Error : Socket Creation Failed\n");
+            return;
+        }
+        SubEntry->ipc_struct.netskt.sock_fd = sock_fd;
+        int rc = sendto(sock_fd, (char *)cmsg, sizeof(*cmsg) + cmsg->tlv_buffer_size, 0, (struct sockaddr *)&server_addr, sizeof(struct sockaddr));
+        if (rc < 0)
+        {
+            printf("Coordinator : Error : Send Failed, errno = %d \n", errno);
+        }
+    }
+    break;
+    case IPC_TYPE_MSGQ:
+    {
+        printf("Coordinator : dispatching message to subscriber [%s, %u] over MQUEUE\n", SubEntry->sub_name, SubEntry->subsriber_id);
+        break;
+    }
+    case IPC_TYPE_UXSKT:
+    {
+        printf("Coordinator : Dispatching message to subscriber [%s, %u] over UXSKT\n", SubEntry->sub_name, SubEntry->subsriber_id);
+        break;
+    }
+    case IPC_TYPE_SHM:
+    {
+        printf("Coordinator : Dispatching message to subscriber [%s, %u] over SHM\n", SubEntry->sub_name, SubEntry->subsriber_id);
+        break;
+    }
+    case IPC_TYPE_CBK:
+    {
+        printf("Coordinator : Dispatching message to subscriber [%s, %u] over CBK\n", SubEntry->sub_name, SubEntry->subsriber_id);
+        if (SubEntry->ipc_struct.cbk.cbk)
+        {
+            SubEntry->ipc_struct.cbk.cbk(cmsg);
+        }
+        break;
+    }
+    default:
+        printf("Coordinator : Error : Unknown IPC Type %u\n", SubEntry->ipc_type);
+        break;
     }
 }
