@@ -22,10 +22,12 @@ COORDINATOR_OBJS=CoordinatorCore/coord_start.o\
 CLIENTLIBS=-Lclientlib -lclient
 ${TARGET1}:clientlib/client.o Common/cmsgOp.o
 	@echo "Building client library"
+# Package into a static library libclient.a
 	ar rcs ${TARGET1} clientlib/client.o Common/cmsgOp.o
 ${TARGET2}:${COORDINATOR_OBJS}
 	@echo "Build coordinator library"
-	ar rcs ${TARGET2} ${COORDINATOR_OBJS}
+# package into a library, libcoord.a
+	ar rcs ${TARGET2} ${COORDINATOR_OBJS} 
 
 ${TARGET3}:CoordinatorCore/coord_main.o ${COORDINATOR_OBJS}
 	@echo "Building cooordinator executable"
